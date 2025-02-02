@@ -1,29 +1,64 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
 import { fetchQuestions } from '../utils/api'
+import Question from '../components/Question'
 
 const QuizScreen = ({ route, navigation }) => {
   const { category, difficulty } = route.params
   const [questions, setQuestions] = useState([])
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [score, setScore] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const loadQuestions = async () => {
       setLoading(true)
-      const quizData = await fetchQuestions(10, category, difficulty)
-
-      if (quizData.length === 0) {
-        setError('No questions found. Try a different category or difficulty.')
-      } else {
-        setQuestions(quizData)
+      try {
+        const quizData = await fetchQuestions(10, category, difficulty)
+        if (quizData.length === 0) {
+          setError(
+            'No questions found. Try a different category or difficulty.',
+          )
+        } else {
+          setQuestions(quizData)
+        }
+      } catch (err) {
+        setError(
+          'Error fetching questions. Please check your internet connection.',
+        )
+        console.error('Error fetching questions:', err)
+      } finally {
+        setLoading(false)
       }
-
-      setLoading(false)
     }
 
     loadQuestions()
   }, [category, difficulty])
+
+  const currentQuestion = useMemo(() => {
+    return questions.length > 0 ? questions[currentQuestionIndex] : null
+  }, [questions, currentQuestionIndex])
+
+  const handleAnswerPress = (answer) => {
+    setSelectedAnswer(answer)
+    if (answer === currentQuestion.correct_answer) {
+      setScore(score + 1)
+    }
+
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1)
+        setSelectedAnswer(null)
+      } else {
+        navigation.navigate('Result', {
+          score,
+          totalQuestions: questions.length,
+        })
+      }
+    }, 500)
+  }
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />
@@ -37,11 +72,21 @@ const QuizScreen = ({ route, navigation }) => {
     )
   }
 
+  if (!currentQuestion) {
+    return null
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quiz Started</Text>
-      <Text>Total Questions: {questions.length}</Text>
-      {/* Next step: Render questions */}
+      <Question
+        question={currentQuestion}
+        selectedAnswer={selectedAnswer}
+        onAnswerPress={handleAnswerPress}
+      />
+
+      <Text style={styles.questionCounter}>
+        Question {currentQuestionIndex + 1} of {questions.length}
+      </Text>
     </View>
   )
 }
@@ -53,8 +98,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-  errorText: { color: 'red', fontSize: 18 },
+  questionCounter: {
+    marginTop: 20,
+    fontSize: 16,
+    color: '#777',
+  },
+  errorText: { color: 'red', fontSize: 18, textAlign: 'center' },
 })
 
 export default QuizScreen
