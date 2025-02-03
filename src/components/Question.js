@@ -1,30 +1,36 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 const Question = ({ question, selectedAnswer, onAnswerPress }) => {
+  if (!question) return null // Prevent rendering if question is undefined
+
+  // Shuffle answers more reliably using useMemo
+  const shuffledAnswers = useMemo(() => {
+    return [...question.incorrect_answers, question.correct_answer].sort(
+      () => Math.random() - 0.5,
+    )
+  }, [question])
+
   return (
     <View style={styles.container}>
       <Text style={styles.questionText}>{question.question}</Text>
 
-      {question.incorrect_answers
-        .concat(question.correct_answer)
-        .sort(() => Math.random() - 0.5)
-        .map((answer, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.answerButton,
-              selectedAnswer === answer && {
-                backgroundColor:
-                  answer === question.correct_answer ? 'green' : 'red',
-              },
-            ]}
-            onPress={() => onAnswerPress(answer)}
-            disabled={selectedAnswer !== null}
-          >
-            <Text style={styles.answerText}>{answer}</Text>
-          </TouchableOpacity>
-        ))}
+      {shuffledAnswers.map((answer, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[
+            styles.answerButton,
+            selectedAnswer === answer && {
+              backgroundColor:
+                answer === question.correct_answer ? 'green' : 'red',
+            },
+          ]}
+          onPress={() => onAnswerPress(answer)}
+          disabled={selectedAnswer !== null}
+        >
+          <Text style={styles.answerText}>{answer}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   )
 }
@@ -59,12 +65,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#333',
     fontWeight: 'bold',
-  },
-  correctAnswer: {
-    backgroundColor: '#28a745',
-  },
-  incorrectAnswer: {
-    backgroundColor: '#ff4d4d',
   },
 })
 
