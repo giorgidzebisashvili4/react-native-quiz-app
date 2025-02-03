@@ -38,7 +38,11 @@ const HomeScreen = ({ navigation }) => {
   }
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#007bff" />
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    )
   }
 
   if (error) {
