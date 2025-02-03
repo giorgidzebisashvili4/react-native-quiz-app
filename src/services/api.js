@@ -21,5 +21,16 @@ export const fetchQuestions = async (amount, category, difficulty) => {
   const data = await apiRequest(
     `${BASE_URL}/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple`,
   )
-  return data?.response_code === 0 ? data.results : []
+
+  if (!data) {
+    console.error('Error: No data received from the API.')
+    return []
+  }
+
+  if (data.response_code !== 0) {
+    console.error(`API Error: Response code ${data.response_code}`)
+    return []
+  }
+
+  return data.results || []
 }
