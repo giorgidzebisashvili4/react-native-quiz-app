@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
 import { fetchQuestions } from '../utils/api'
 import Question from '../components/Question'
@@ -41,24 +41,27 @@ const QuizScreen = ({ route, navigation }) => {
     return questions.length > 0 ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
 
-  const handleAnswerPress = (answer) => {
-    setSelectedAnswer(answer)
-    if (answer === currentQuestion.correct_answer) {
-      setScore(score + 1)
-    }
-
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1)
-        setSelectedAnswer(null)
-      } else {
-        navigation.navigate('Result', {
-          score,
-          totalQuestions: questions.length,
-        })
+  const handleAnswerPress = useCallback(
+    (answer) => {
+      setSelectedAnswer(answer)
+      if (answer === currentQuestion.correct_answer) {
+        setScore((prevScore) => prevScore + 1)
       }
-    }, 500)
-  }
+
+      setTimeout(() => {
+        setSelectedAnswer(null)
+        if (currentQuestionIndex < questions.length - 1) {
+          setCurrentQuestionIndex((prevIndex) => prevIndex + 1)
+        } else {
+          navigation.navigate('Result', {
+            score,
+            totalQuestions: questions.length,
+          })
+        }
+      }, 500)
+    },
+    [currentQuestionIndex, questions.length, navigation],
+  )
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />
