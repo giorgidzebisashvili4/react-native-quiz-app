@@ -36,18 +36,21 @@ const ResultScreen = ({ route, navigation }) => {
   }, [highScores])
 
   useEffect(() => {
-    // Update high scores and sort
-    const updateHighScores = () => {
+    const updateHighScores = async () => {
       const newScore = { score, totalQuestions }
       const updatedHighScores = [...highScores, newScore]
         .sort((a, b) => b.score / b.totalQuestions - a.score / a.totalQuestions) // Sort by percentage
-        .slice(0, 10) // Keep only top 10 scores
+        .slice(0, 10)
 
       setHighScores(updatedHighScores)
+      await AsyncStorage.setItem(
+        'highScores',
+        JSON.stringify(updatedHighScores),
+      )
     }
 
     updateHighScores()
-  }, [score, totalQuestions])
+  }, [])
 
   const playAgain = () => {
     navigation.navigate('Home') // Navigate back to HomeScreen to play again
