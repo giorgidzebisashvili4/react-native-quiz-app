@@ -97,13 +97,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
   questionCounter: {
     marginTop: 20,
-    fontSize: 16,
-    color: '#777',
+    fontSize: 18,
+    color: '#555',
+    fontWeight: 'bold',
   },
-  errorText: { color: 'red', fontSize: 18, textAlign: 'center' },
+  errorText: {
+    color: '#ff4d4d',
+    fontSize: 18,
+    textAlign: 'center',
+  },
 })
 
 export default QuizScreen

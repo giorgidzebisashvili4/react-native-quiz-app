@@ -81,25 +81,44 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 15,
+    color: '#007bff',
   },
   score: {
     fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 20,
+    color: '#333',
   },
   highScoresTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
+    color: '#0056b3',
   },
   highScoreItem: {
     fontSize: 16,
     marginBottom: 5,
+    color: '#555',
+  },
+  playAgainButton: {
+    backgroundColor: '#007bff',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 20,
+    width: '60%',
+    alignItems: 'center',
+  },
+  playAgainText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 })
 

@@ -92,17 +92,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#333',
+    color: '#007bff',
   },
   pickerContainer: {
-    width: '80%',
+    width: '90%',
     marginBottom: 20,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3, // Android shadow
   },
   label: {
     fontSize: 16,
@@ -112,16 +121,25 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: '100%',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
   },
   error: {
-    color: 'red',
+    color: '#ff4d4d',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
+  },
+  startButton: {
+    backgroundColor: '#007bff',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 10,
+    width: '60%',
+    alignItems: 'center',
+  },
+  startButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 })
 

@@ -31,15 +31,16 @@ const Question = ({ question, selectedAnswer, onAnswerPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,  No need to flex here, parent will handle it
-    //justifyContent: 'center',
-    //alignItems: 'center',
-    width: '100%', // Question takes up full width
+    width: '100%',
+    alignItems: 'center',
+    padding: 20,
   },
   questionText: {
-    fontSize: 20,
+    fontSize: 22,
     marginBottom: 20,
     textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#333',
   },
   answerButton: {
     backgroundColor: '#e0e0e0',
@@ -48,10 +49,22 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: '80%',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
   },
   answerText: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#333',
+    fontWeight: 'bold',
+  },
+  correctAnswer: {
+    backgroundColor: '#28a745',
+  },
+  incorrectAnswer: {
+    backgroundColor: '#ff4d4d',
   },
 })
 
