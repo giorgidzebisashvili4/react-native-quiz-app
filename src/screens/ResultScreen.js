@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage' //
+import React, { useEffect, useState, useCallback } from 'react'
+import { View, Text, StyleSheet, Button, FlatList } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const ResultScreen = ({ route, navigation }) => {
-  const { score, totalQuestions } = route.params
+  const { name, score, totalQuestions } = route.params
   const [highScores, setHighScores] = useState([])
+  const [hasNewHighScore, setHasNewHighScore] = useState(false)
 
   useEffect(() => {
-    // Load high scores from AsyncStorage
     const loadHighScores = async () => {
       try {
         const storedHighScores = await AsyncStorage.getItem('highScores')
-        if (storedHighScores) {
-          setHighScores(JSON.parse(storedHighScores))
-        }
+        setHighScores(storedHighScores ? JSON.parse(storedHighScores) : [])
       } catch (error) {
         console.error('Error loading high scores:', error)
       }
@@ -22,39 +20,63 @@ const ResultScreen = ({ route, navigation }) => {
     loadHighScores()
   }, [])
 
-  useEffect(() => {
-    // Save high scores to AsyncStorage
-    const saveHighScores = async () => {
-      try {
-        await AsyncStorage.setItem('highScores', JSON.stringify(highScores))
-      } catch (error) {
-        console.error('Error saving high scores:', error)
-      }
+  const saveHighScores = useCallback(async () => {
+    // useCallback for memoization
+    try {
+      await AsyncStorage.setItem('highScores', JSON.stringify(highScores))
+    } catch (error) {
+      console.error('Error saving high scores:', error)
     }
-
-    saveHighScores()
   }, [highScores])
 
   useEffect(() => {
     const updateHighScores = async () => {
-      const newScore = { score, totalQuestions }
-      const updatedHighScores = [...highScores, newScore]
-        .sort((a, b) => b.score / b.totalQuestions - a.score / a.totalQuestions) // Sort by percentage
-        .slice(0, 10)
+      const newScore = { name, score, totalQuestions }
+      let updatedHighScores = [...highScores]
 
-      setHighScores(updatedHighScores)
-      await AsyncStorage.setItem(
-        'highScores',
-        JSON.stringify(updatedHighScores),
+      const isDuplicate = updatedHighScores.some(
+        (existingScore) =>
+          existingScore.name === newScore.name &&
+          existingScore.score === newScore.score &&
+          existingScore.totalQuestions === newScore.totalQuestions,
       )
+
+      if (!isDuplicate) {
+        updatedHighScores.push(newScore)
+        updatedHighScores.sort((a, b) => {
+          const percentageA = a.score / a.totalQuestions
+          const percentageB = b.score / b.totalQuestions
+          if (percentageB !== percentageA) {
+            return percentageB - percentageA
+          }
+          return a.name.localeCompare(b.name)
+        })
+        updatedHighScores = updatedHighScores.slice(0, 5)
+        setHighScores(updatedHighScores)
+        await saveHighScores()
+        setHasNewHighScore(true)
+      }
     }
 
     updateHighScores()
-  }, [])
+  }, [name, score, totalQuestions, highScores, saveHighScores]) // Removed highScores from dependency array
+
+  useEffect(() => {
+    if (hasNewHighScore) {
+      saveHighScores()
+      setHasNewHighScore(false)
+    }
+  }, [hasNewHighScore, saveHighScores]) // Added saveHighScores to dependency array
 
   const playAgain = () => {
-    navigation.navigate('Home') // Navigate back to HomeScreen to play again
+    navigation.navigate('Home')
   }
+  const renderHighScoreItem = ({ item, index }) => (
+    <Text key={index} style={styles.highScoreItem}>
+      {index + 1}. {item.name} - {item.score} / {item.totalQuestions} (
+      {(item.score / item.totalQuestions) * 100}%)
+    </Text>
+  )
 
   return (
     <View style={styles.container}>
@@ -63,15 +85,12 @@ const ResultScreen = ({ route, navigation }) => {
         Score: {score} / {totalQuestions} ({(score / totalQuestions) * 100}%)
       </Text>
 
-      <Text style={styles.highScoresTitle}>High Scores:</Text>
-      {highScores.map((highScore, index) => (
-        <Text key={index} style={styles.highScoreItem}>
-          {/* {index < 9 ? `${index + 1}.` : `${index + 1}.`}{' '} */}
-          {/* Conditional formatting */}
-          {highScore.score} / {highScore.totalQuestions} (
-          {(highScore.score / highScore.totalQuestions) * 100}%)
-        </Text>
-      ))}
+      <Text style={styles.highScoresTitle}>Top 5 High Scores:</Text>
+      <FlatList
+        data={highScores}
+        renderItem={renderHighScoreItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
 
       <Button title="Play Again" onPress={playAgain} />
     </View>

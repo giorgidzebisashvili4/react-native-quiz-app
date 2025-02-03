@@ -4,7 +4,7 @@ import { fetchQuestions } from '../services/api'
 import Question from '../components/Question'
 
 const QuizScreen = ({ route, navigation }) => {
-  const { category, difficulty } = route.params
+  const { category, difficulty, name } = route.params
   const [questions, setQuestions] = useState([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
@@ -56,6 +56,7 @@ const QuizScreen = ({ route, navigation }) => {
           navigation.navigate('Result', {
             score,
             totalQuestions: questions.length,
+            name,
           })
         }
       }, 500)

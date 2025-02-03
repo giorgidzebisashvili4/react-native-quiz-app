@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native'
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  ActivityIndicator,
+  TextInput,
+} from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { fetchCategories } from '../services/api' // Import your API function
 
 const HomeScreen = ({ navigation }) => {
+  const [name, setName] = useState('')
   const [categories, setCategories] = useState([])
   const [category, setCategory] = useState('')
   const [difficulty, setDifficulty] = useState('')
@@ -17,7 +25,6 @@ const HomeScreen = ({ navigation }) => {
         setCategories(fetchedCategories)
 
         if (fetchedCategories && fetchedCategories.length > 0) {
-          // Check if fetchedCategories is not null or undefined and has elements
           setCategory(fetchedCategories[0].id)
         }
       } catch (err) {
@@ -34,7 +41,12 @@ const HomeScreen = ({ navigation }) => {
   }, [])
 
   const startQuiz = () => {
-    navigation.navigate('Quiz', { category, difficulty })
+    if (!name.trim()) {
+      alert('Please enter your name before starting the quiz.')
+      return
+    }
+
+    navigation.navigate('Quiz', { name, category, difficulty })
   }
 
   if (loading) {
@@ -57,6 +69,18 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Quiz Settings</Text>
 
+      {/* Name Input */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Your Name:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your name"
+          value={name}
+          onChangeText={setName}
+        />
+      </View>
+
+      {/* Category Picker */}
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Category:</Text>
         <Picker
@@ -71,6 +95,7 @@ const HomeScreen = ({ navigation }) => {
         </Picker>
       </View>
 
+      {/* Difficulty Picker */}
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Difficulty:</Text>
         <Picker
@@ -85,6 +110,7 @@ const HomeScreen = ({ navigation }) => {
         </Picker>
       </View>
 
+      {/* Start Quiz Button */}
       <Button title="Start Quiz" onPress={startQuiz} color="#007bff" />
     </View>
   )
@@ -104,6 +130,27 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#007bff',
   },
+  inputContainer: {
+    width: '90%',
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  input: {
+    height: 50,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    fontSize: 16,
+    paddingLeft: 8,
+  },
   pickerContainer: {
     width: '90%',
     marginBottom: 20,
@@ -115,7 +162,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    elevation: 3, // Android shadow
+    elevation: 3,
   },
   label: {
     fontSize: 16,
@@ -131,19 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
-  },
-  startButton: {
-    backgroundColor: '#007bff',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 10,
-    width: '60%',
-    alignItems: 'center',
-  },
-  startButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 })
 
