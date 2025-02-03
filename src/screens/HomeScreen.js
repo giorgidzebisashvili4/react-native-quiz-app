@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import { fetchCategories } from '../utils/api' // Import your API function
+import { fetchCategories } from '../services/api' // Import your API function
 
 const HomeScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([])

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
-import { fetchQuestions } from '../utils/api'
+import { fetchQuestions } from '../services/api'
 import Question from '../components/Question'
 
 const QuizScreen = ({ route, navigation }) => {
