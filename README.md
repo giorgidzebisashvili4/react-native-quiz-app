@@ -1,20 +1,16 @@
 # React Native Quiz App
 
-![Quiz App Demo](src/assets/demo.gif)
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+  <img src="src/assets/demo.gif" alt="Quiz App Demo" style="max-width: 300px; height: auto; margin: 10px;">
+</div>
 
 ## 📱 Screenshots
 
-### 🏠 Home Screen
-
-![Home Screen](src/assets/screenshot1.jpg)
-
-### 🎯 Quiz Screen
-
-![Quiz Screen](src/assets/screenshot2.jpg)
-
-### 🏆 Results Screen
-
-![Results Screen](src/assets/screenshot3.jpg)
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+  <img src="src/assets/screenshot1.jpg" alt="Home Screen" style="max-width: 200px; height: auto; margin: 10px;">
+  <img src="src/assets/screenshot2.jpg" alt="Quiz Screen" style="max-width: 200px; height: auto; margin: 10px;">
+  <img src="src/assets/screenshot3.jpg" alt="Results Screen" style="max-width: 200px; height: auto; margin: 10px;">
+</div>
 
 ## 📌 Overview
 
@@ -34,23 +30,7 @@ This is a React Native quiz application that allows users to select a quiz categ
 
 - **React Native** (Expo)
 - **React Navigation** for screen transitions
-- **Context API** for state management
 - **React Native Testing Library & Jest** for unit testing
-
-## 📂 Folder Structure
-
-```
-📦 quiz-app
- ┣ 📂 src
- ┃ ┣ 📂 components      # Reusable UI components
- ┃ ┣ 📂 screens         # Screens (Home, Quiz, Result)
- ┃ ┣ 📂 utils           # Helper functions
- ┃ ┣ 📂 hooks           # Custom hooks
- ┃ ┗ 📂 assets          # Images, icons
- ┣ 📄 App.js            # Main entry point
- ┣ 📄 package.json      # Dependencies & scripts
- ┗ 📄 README.md         # Project documentation
-```
 
 ## 🔧 Installation & Setup
 
@@ -65,7 +45,7 @@ This is a React Native quiz application that allows users to select a quiz categ
    ```
 3. Start the development server:
    ```sh
-   npx expo start
+   npm start
    ```
 
 ## ✅ Testing
@@ -78,23 +58,9 @@ npm test
 
 ## 📈 Performance Optimizations
 
-- **Lazy loading screens** using `React.lazy` & `Suspense`
+- **React Navigation** for screen transitions
 - **Memoization** with `React.memo`, `useMemo`, and `useCallback`
 - **FlatList optimizations** for efficient rendering
 - **Minimal re-renders** by optimizing state updates
-
-## 🛠️ Contributing
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m 'Added a new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a pull request.
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
----
 
 🔥 **Enjoy coding & happy learning!** 😊
