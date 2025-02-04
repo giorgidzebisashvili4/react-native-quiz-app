@@ -53,7 +53,7 @@ const ResultScreen = ({ route, navigation }) => {
           }
           return a.name.localeCompare(b.name)
         })
-        updatedHighScores = updatedHighScores.slice(0, 10)
+        updatedHighScores = updatedHighScores.slice(0, 5)
         setHighScores(updatedHighScores)
         await saveHighScores()
         setHasNewHighScore(true)
@@ -90,7 +90,7 @@ const ResultScreen = ({ route, navigation }) => {
         </Text>
       </View>
       <View style={styles.topScoresContainer}>
-        <Text style={styles.highScoresTitle}>Top 10 High Scores</Text>
+        <Text style={styles.highScoresTitle}>Top 5 High Scores</Text>
         <FlatList
           data={highScores}
           renderItem={renderHighScoreItem}
@@ -112,8 +112,7 @@ const styles = StyleSheet.create({
   },
   scoreContainer: {
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 50,
+    marginTop: 30,
     backgroundColor: '#3a8d71',
     width: '70%',
     paddingVertical: 20,
@@ -140,8 +139,6 @@ const styles = StyleSheet.create({
   },
   topScoresContainer: {
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 50,
     paddingVertical: 20,
     backgroundColor: '#FCFCFC',
     width: '70%',

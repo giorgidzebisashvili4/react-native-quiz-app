@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   listContainer: {
-    width: 300,
+    width: 250,
     paddingVertical: 10,
   },
   answerWrapper: {

@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 export default function App() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <AppNavigator />
     </SafeAreaView>
   )
