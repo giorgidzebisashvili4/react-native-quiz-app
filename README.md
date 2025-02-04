@@ -1,5 +1,21 @@
 # React Native Quiz App
 
+![Quiz App Demo](src/assets/demo.gif)
+
+## 📱 Screenshots
+
+### 🏠 Home Screen
+
+![Home Screen](src/assets/screenshot1.jpg)
+
+### 🎯 Quiz Screen
+
+![Quiz Screen](src/assets/screenshot2.jpg)
+
+### 🏆 Results Screen
+
+![Results Screen](src/assets/screenshot3.jpg)
+
 ## 📌 Overview
 
 This is a React Native quiz application that allows users to select a quiz category and difficulty level, answer multiple-choice questions fetched from the OpenTDB API, and receive a score at the end. The app is designed with a clean and intuitive UI, optimized for performance, and follows best coding practices.
@@ -11,7 +27,7 @@ This is a React Native quiz application that allows users to select a quiz categ
 - Displays **multiple-choice questions** with real-time feedback
 - **Tracks and displays the final score**
 - **Allows users to restart** the quiz
-- Optimized performance with **lazy loading, React.memo, useMemo, and useCallback**
+- Optimized performance with ** React.memo, useMemo, and useCallback**
 - Accessible and mobile-friendly UI
 
 ## 🛠️ Technologies Used
