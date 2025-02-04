@@ -33,35 +33,48 @@ const ResultScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const updateHighScores = async () => {
-      const newScore = { name, score, totalQuestions }
-      let updatedHighScores = [...highScores]
+      try {
+        const storedHighScores = await AsyncStorage.getItem('highScores')
+        const parsedHighScores = storedHighScores
+          ? JSON.parse(storedHighScores)
+          : []
 
-      const isDuplicate = updatedHighScores.some(
-        (existingScore) =>
-          existingScore.name === newScore.name &&
-          existingScore.score === newScore.score &&
-          existingScore.totalQuestions === newScore.totalQuestions,
-      )
+        const newScore = { name, score, totalQuestions }
 
-      if (!isDuplicate) {
-        updatedHighScores.push(newScore)
-        updatedHighScores.sort((a, b) => {
-          const percentageA = a.score / a.totalQuestions
-          const percentageB = b.score / b.totalQuestions
-          if (percentageB !== percentageA) {
-            return percentageB - percentageA
-          }
-          return a.name.localeCompare(b.name)
-        })
-        updatedHighScores = updatedHighScores.slice(0, 5)
-        setHighScores(updatedHighScores)
-        await saveHighScores()
-        setHasNewHighScore(true)
+        const isDuplicate = parsedHighScores.some(
+          (existingScore) =>
+            existingScore.name === newScore.name &&
+            existingScore.score === newScore.score &&
+            existingScore.totalQuestions === newScore.totalQuestions,
+        )
+
+        if (!isDuplicate) {
+          let updatedHighScores = [...parsedHighScores, newScore]
+
+          // Sort scores by percentage, then alphabetically by name
+          updatedHighScores.sort((a, b) => {
+            const percentageA = a.score / a.totalQuestions
+            const percentageB = b.score / b.totalQuestions
+            return percentageB - percentageA || a.name.localeCompare(b.name)
+          })
+
+          // Keep only the top 5 scores
+          updatedHighScores = updatedHighScores.slice(0, 5)
+
+          await AsyncStorage.setItem(
+            'highScores',
+            JSON.stringify(updatedHighScores),
+          )
+          setHighScores(updatedHighScores)
+          setHasNewHighScore(true)
+        }
+      } catch (error) {
+        console.error('Error updating high scores:', error)
       }
     }
 
     updateHighScores()
-  }, [name, score, totalQuestions, highScores, saveHighScores]) // Removed highScores from dependency array
+  }, [name, score, totalQuestions])
 
   useEffect(() => {
     if (hasNewHighScore) {
@@ -73,11 +86,15 @@ const ResultScreen = ({ route, navigation }) => {
   const playAgain = () => {
     navigation.navigate('Home')
   }
-  const renderHighScoreItem = ({ item, index }) => (
-    <Text key={index} style={styles.highScoreItem}>
-      {index + 1}. {item.name} - {item.score} / {item.totalQuestions} (
-      {(item.score / item.totalQuestions) * 100}%)
-    </Text>
+
+  const renderHighScoreItem = useCallback(
+    ({ item, index }) => (
+      <Text key={index} style={styles.highScoreItem}>
+        {index + 1}. {item.name} - {item.score} / {item.totalQuestions} (
+        {((item.score / item.totalQuestions) * 100).toFixed(1)}%)
+      </Text>
+    ),
+    [],
   )
 
   return (

@@ -25,10 +25,7 @@ const HomeScreen = ({ navigation }) => {
       try {
         const fetchedCategories = await fetchCategories()
         setCategories(fetchedCategories)
-
-        if (fetchedCategories && fetchedCategories.length > 0) {
-          setCategory(fetchedCategories[0].id)
-        }
+        setCategory(fetchedCategories?.[0]?.id || '')
       } catch (err) {
         console.error('Error loading categories:', err)
         setError(
@@ -38,86 +35,76 @@ const HomeScreen = ({ navigation }) => {
         setLoading(false)
       }
     }
-
     loadCategories()
   }, [])
 
   const startQuiz = () => {
     if (!name.trim()) {
-      alert('Please enter your name before starting the quiz.')
-      return
+      return alert('Please enter your name before starting the quiz.')
     }
-
     navigation.navigate('Quiz', { name, category, difficulty })
-  }
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#649e6c" />
-      </View>
-    )
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.error}>{error}</Text>
-      </View>
-    )
   }
 
   return (
     <LinearGradient colors={['#FDF9D9', '#A2B965']} style={styles.container}>
-      <Text style={styles.title}>Quiz App</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#649e6c" />
+      ) : error ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <PrimaryButton onPress={() => setLoading(true)}>Retry</PrimaryButton>
+        </View>
+      ) : (
+        <>
+          <Text style={styles.title}>Quiz App</Text>
 
-      {/* Name Input */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your name"
-          placeholderTextColor="#FFCC33"
-          value={name}
-          onChangeText={setName}
-          maxLength={20}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      </View>
+          {/* Name Input */}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your name"
+              placeholderTextColor="#FFCC33"
+              value={name}
+              onChangeText={setName}
+              maxLength={20}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
 
-      {/* Category Picker */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Category</Text>
-        <Picker
-          selectedValue={category}
-          style={styles.picker}
-          onValueChange={(itemValue) => setCategory(itemValue)}
-        >
-          <Picker.Item label="Any Category" value="" />
-          {categories.map((cat) => (
-            <Picker.Item key={cat.id} label={cat.name} value={cat.id} />
-          ))}
-        </Picker>
-      </View>
+          {/* Category Picker */}
+          <View style={styles.pickerContainer}>
+            <Text style={styles.label}>Category</Text>
+            <Picker
+              selectedValue={category}
+              style={styles.picker}
+              onValueChange={(itemValue) => setCategory(itemValue)}
+            >
+              {categories.map((cat) => (
+                <Picker.Item key={cat.id} label={cat.name} value={cat.id} />
+              ))}
+            </Picker>
+          </View>
 
-      {/* Difficulty Picker */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Difficulty</Text>
-        <Picker
-          selectedValue={difficulty}
-          style={styles.picker}
-          onValueChange={(itemValue) => setDifficulty(itemValue)}
-        >
-          <Picker.Item label="Any Difficulty" value="" />
-          <Picker.Item label="Easy" value="easy" />
-          <Picker.Item label="Medium" value="medium" />
-          <Picker.Item label="Hard" value="hard" />
-        </Picker>
-      </View>
+          {/* Difficulty Picker */}
+          <View style={styles.pickerContainer}>
+            <Text style={styles.label}>Difficulty</Text>
+            <Picker
+              selectedValue={difficulty}
+              style={styles.picker}
+              onValueChange={(itemValue) => setDifficulty(itemValue)}
+            >
+              <Picker.Item label="Any Difficulty" value="" />
+              <Picker.Item label="Easy" value="easy" />
+              <Picker.Item label="Medium" value="medium" />
+              <Picker.Item label="Hard" value="hard" />
+            </Picker>
+          </View>
 
-      {/* Start Quiz Button */}
-      {/* <Button title="Start Quiz" onPress={startQuiz} color="#FF6347" /> */}
-      <PrimaryButton onPress={startQuiz}>Start Quiz</PrimaryButton>
+          {/* Start Quiz Button */}
+          <PrimaryButton onPress={startQuiz}>Start Quiz</PrimaryButton>
+        </>
+      )}
     </LinearGradient>
   )
 }

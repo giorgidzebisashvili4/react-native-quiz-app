@@ -11,10 +11,19 @@ import { decode } from 'html-entities' // Import to decode special characters
 const Question = ({ question, selectedAnswer, onAnswerPress }) => {
   if (!question) return null
 
+  const shuffleArray = (array) => {
+    let newArray = [...array]
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[newArray[i], newArray[j]] = [newArray[j], newArray[i]]
+    }
+    return newArray
+  }
+
   const answers = useMemo(() => {
-    return [...question.incorrect_answers, question.correct_answer]
-      .map((answer) => decode(answer)) // Decode special characters
-      .sort(() => Math.random() - 0.5)
+    return shuffleArray(
+      [...question.incorrect_answers, question.correct_answer].map(decode),
+    )
   }, [question])
 
   const renderAnswer = ({ item: answer }) => (
@@ -22,12 +31,13 @@ const Question = ({ question, selectedAnswer, onAnswerPress }) => {
       <TouchableOpacity
         style={[
           styles.answerButton,
-          selectedAnswer === answer && {
+          selectedAnswer && {
             backgroundColor:
               answer === decode(question.correct_answer)
                 ? '#FFCC33'
                 : '#ff4d4d',
           },
+          selectedAnswer === answer && { opacity: 0.7 },
         ]}
         onPress={() => onAnswerPress(answer)}
         disabled={selectedAnswer !== null}

@@ -44,9 +44,10 @@ const QuizScreen = ({ route, navigation }) => {
   const handleAnswerPress = useCallback(
     (answer) => {
       setSelectedAnswer(answer)
-      if (answer === currentQuestion.correct_answer) {
-        setScore((prevScore) => prevScore + 1)
-      }
+      setScore(
+        (prevScore) =>
+          prevScore + (answer === currentQuestion.correct_answer ? 1 : 0),
+      )
 
       setTimeout(() => {
         setSelectedAnswer(null)
@@ -54,14 +55,14 @@ const QuizScreen = ({ route, navigation }) => {
           setCurrentQuestionIndex((prevIndex) => prevIndex + 1)
         } else {
           navigation.navigate('Result', {
-            score,
+            score: score + (answer === currentQuestion.correct_answer ? 1 : 0), // Ensure updated score
             totalQuestions: questions.length,
             name,
           })
         }
       }, 500)
     },
-    [currentQuestionIndex, questions.length, navigation],
+    [currentQuestionIndex, questions.length, navigation, score],
   )
 
   if (loading) {
@@ -76,6 +77,9 @@ const QuizScreen = ({ route, navigation }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
+        <PrimaryButton onPress={() => navigation.goBack()}>
+          Try Again
+        </PrimaryButton>
       </View>
     )
   }
