@@ -1,16 +1,16 @@
 # React Native Quiz App
 
-<div style="display: flex; flex-wrap: wrap; justify-content: center;">
-  <img src="src/assets/demo.gif" alt="Quiz App Demo" style="max-width: 300px; height: auto; margin: 10px;">
-</div>
+  <img src="src/assets/demo.gif" alt="Quiz App Demo" height="530">
 
 ## 📱 Screenshots
 
-<div style="display: flex; flex-wrap: wrap; justify-content: center;">
-  <img src="src/assets/screenshot1.jpg" alt="Home Screen" style="max-width: 200px; height: auto; margin: 10px;">
-  <img src="src/assets/screenshot2.jpg" alt="Quiz Screen" style="max-width: 200px; height: auto; margin: 10px;">
-  <img src="src/assets/screenshot3.jpg" alt="Results Screen" style="max-width: 200px; height: auto; margin: 10px;">
-</div>
+<table>
+  <tr>
+    <td><img src="./src/assets/screenshot1.jpg" height="530"  alt="home screen"></td>
+    <td><img src="./src/assets/screenshot2.jpg" height="530" alt="quiz screen"></td>
+    <td><img src="./src/assets/screenshot3.jpg" height="530" alt="results screen"></td>
+  </tr>
+</table>
 
 ## 📌 Overview
 
