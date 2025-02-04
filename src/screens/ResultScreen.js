@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View, Text, StyleSheet, Button, FlatList } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import PrimaryButton from '../components/PrimaryButton'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const ResultScreen = ({ route, navigation }) => {
   const { name, score, totalQuestions } = route.params
@@ -51,7 +53,7 @@ const ResultScreen = ({ route, navigation }) => {
           }
           return a.name.localeCompare(b.name)
         })
-        updatedHighScores = updatedHighScores.slice(0, 5)
+        updatedHighScores = updatedHighScores.slice(0, 10)
         setHighScores(updatedHighScores)
         await saveHighScores()
         setHasNewHighScore(true)
@@ -79,67 +81,93 @@ const ResultScreen = ({ route, navigation }) => {
   )
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Quiz Results</Text>
-      <Text style={styles.score}>
-        Score: {score} / {totalQuestions} ({(score / totalQuestions) * 100}%)
-      </Text>
-
-      <Text style={styles.highScoresTitle}>Top 5 High Scores:</Text>
-      <FlatList
-        data={highScores}
-        renderItem={renderHighScoreItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
-
-      <Button title="Play Again" onPress={playAgain} />
-    </View>
+    <LinearGradient colors={['#FDF9D9', '#A2B965']} style={styles.container}>
+      <View style={styles.scoreContainer}>
+        <Text style={styles.title}>Quiz Results</Text>
+        <Text style={styles.score}>Your Score</Text>
+        <Text style={styles.score}>
+          {score} / {totalQuestions} ({(score / totalQuestions) * 100}%)
+        </Text>
+      </View>
+      <View style={styles.topScoresContainer}>
+        <Text style={styles.highScoresTitle}>Top 10 High Scores</Text>
+        <FlatList
+          data={highScores}
+          renderItem={renderHighScoreItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+      <PrimaryButton onPress={playAgain}>Play Again</PrimaryButton>
+    </LinearGradient>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FDF9D9',
+  },
+  scoreContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 50,
+    backgroundColor: '#3a8d71',
+    width: '70%',
+    paddingVertical: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
   },
   title: {
-    fontSize: 26,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#007bff',
+    marginBottom: 10,
+    color: '#FFCC33',
+    borderBottomWidth: 2,
+    borderBottomColor: '#FFCC33',
+    paddingBottom: 10,
   },
   score: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: 'white',
+  },
+  topScoresContainer: {
+    alignItems: 'center',
     marginBottom: 20,
-    color: '#333',
+    marginTop: 50,
+    paddingVertical: 20,
+    backgroundColor: '#FCFCFC',
+    width: '70%',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
   },
   highScoresTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
+
     marginBottom: 10,
-    color: '#0056b3',
+    color: '#3a8d71',
+    borderBottomWidth: 2,
+    borderBottomColor: '#3a8d71',
+    paddingBottom: 10,
+    width: '70%',
+    textAlign: 'center',
   },
   highScoreItem: {
     fontSize: 16,
     marginBottom: 5,
     color: '#555',
-  },
-  playAgainButton: {
-    backgroundColor: '#007bff',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 20,
-    width: '60%',
-    alignItems: 'center',
-  },
-  playAgainText: {
-    color: '#fff',
-    fontSize: 18,
     fontWeight: 'bold',
   },
 })
