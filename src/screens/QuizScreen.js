@@ -67,7 +67,7 @@ const QuizScreen = ({ route, navigation }) => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#007bff" />
+        <ActivityIndicator size="large" color="#649e6c" />
       </View>
     )
   }
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FDF9D9',
   },
   questionCounter: {
     marginTop: 20,

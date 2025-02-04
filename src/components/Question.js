@@ -6,14 +6,15 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native'
+import { decode } from 'html-entities' // Import to decode special characters
 
 const Question = ({ question, selectedAnswer, onAnswerPress }) => {
   if (!question) return null
 
   const answers = useMemo(() => {
-    return [...question.incorrect_answers, question.correct_answer].sort(
-      () => Math.random() - 0.5,
-    )
+    return [...question.incorrect_answers, question.correct_answer]
+      .map((answer) => decode(answer)) // Decode special characters
+      .sort(() => Math.random() - 0.5)
   }, [question])
 
   const renderAnswer = ({ item: answer }) => (
@@ -23,7 +24,9 @@ const Question = ({ question, selectedAnswer, onAnswerPress }) => {
           styles.answerButton,
           selectedAnswer === answer && {
             backgroundColor:
-              answer === question.correct_answer ? 'green' : 'red',
+              answer === decode(question.correct_answer)
+                ? '#FFCC33'
+                : '#ff4d4d',
           },
         ]}
         onPress={() => onAnswerPress(answer)}
@@ -36,7 +39,7 @@ const Question = ({ question, selectedAnswer, onAnswerPress }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.questionText}>{question.question}</Text>
+      <Text style={styles.questionText}>{decode(question.question)}</Text>
 
       <FlatList
         data={answers}
@@ -60,19 +63,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     color: '#333',
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
   },
   listContainer: {
     width: 300,
     paddingVertical: 10,
   },
   answerWrapper: {
-    // Style for the wrapper View
-    width: '100%', // Take full width
-    alignItems: 'center', // Center horizontally
+    width: '100%',
+    alignItems: 'center',
   },
   answerButton: {
-    width: '100%', // Now relative to answerWrapper
-    backgroundColor: '#e0e0e0',
+    width: '100%',
+    backgroundColor: '#3a8d71',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 10,
@@ -86,7 +96,7 @@ const styles = StyleSheet.create({
   },
   answerText: {
     fontSize: 18,
-    color: '#333',
+    color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
   },

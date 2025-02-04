@@ -12,7 +12,7 @@ const ResultScreen = lazy(() => import('./screens/ResultScreen'))
 
 const LoadingIndicator = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <ActivityIndicator size="large" color="#0000ff" />
+    <ActivityIndicator size="large" color="#649e6c" />
   </View>
 )
 
