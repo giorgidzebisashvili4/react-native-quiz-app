@@ -9,6 +9,8 @@ import {
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { fetchCategories } from '../services/api' // Import your API function
+import PrimaryButton from '../components/PrimaryButton'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const HomeScreen = ({ navigation }) => {
   const [name, setName] = useState('')
@@ -66,23 +68,26 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Quiz Settings</Text>
+    <LinearGradient colors={['#FDF9D9', '#A2B965']} style={styles.container}>
+      <Text style={styles.title}>Quiz App</Text>
 
       {/* Name Input */}
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Your Name:</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter your name"
+          placeholderTextColor="#FFCC33"
           value={name}
           onChangeText={setName}
+          maxLength={20}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
       </View>
 
       {/* Category Picker */}
       <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Category:</Text>
+        <Text style={styles.label}>Category</Text>
         <Picker
           selectedValue={category}
           style={styles.picker}
@@ -97,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
 
       {/* Difficulty Picker */}
       <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Difficulty:</Text>
+        <Text style={styles.label}>Difficulty</Text>
         <Picker
           selectedValue={difficulty}
           style={styles.picker}
@@ -111,8 +116,9 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       {/* Start Quiz Button */}
-      <Button title="Start Quiz" onPress={startQuiz} color="#007bff" />
-    </View>
+      {/* <Button title="Start Quiz" onPress={startQuiz} color="#FF6347" /> */}
+      <PrimaryButton onPress={startQuiz}>Start Quiz</PrimaryButton>
+    </LinearGradient>
   )
 }
 
@@ -122,20 +128,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 28,
+    fontSize: 45,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#007bff',
+    marginBottom: 40,
+    color: '#649e6c',
   },
   inputContainer: {
     width: '90%',
     marginBottom: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#3a8d71',
     borderRadius: 8,
-    paddingVertical: 5,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -146,15 +151,20 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    fontSize: 16,
+    color: '#FFCC33',
+    borderBottomWidth: 2,
+    borderBottomColor: '#FFCC33',
+    fontSize: 20,
     paddingLeft: 8,
+    fontWeight: 'bold',
   },
   pickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     width: '90%',
     marginBottom: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#3a8d71',
     borderRadius: 8,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -165,13 +175,18 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   label: {
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 5,
-    color: '#555',
+    color: '#FFCC33',
+    borderRightWidth: 2,
+    borderRightColor: '#FFCC33',
+    paddingRight: 10,
   },
   picker: {
-    height: 50,
-    width: '100%',
+    flex: 1,
+    color: 'white',
+    fontSize: 18,
   },
   error: {
     color: '#ff4d4d',
