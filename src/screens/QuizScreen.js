@@ -84,17 +84,27 @@ const QuizScreen = ({ route, navigation }) => {
     return null
   }
 
+  // Calculate progress percentage
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100
+
   return (
     <View style={styles.container}>
+      {/* Progress Bar */}
+      <View style={styles.progressBarContainer}>
+        <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
+      </View>
+
+      {/* Question Counter */}
+      <Text style={styles.questionCounter}>
+        Question {currentQuestionIndex + 1} of {questions.length}
+      </Text>
+
+      {/* Question Component */}
       <Question
         question={currentQuestion}
         selectedAnswer={selectedAnswer}
         onAnswerPress={handleAnswerPress}
       />
-
-      <Text style={styles.questionCounter}>
-        Question {currentQuestionIndex + 1} of {questions.length}
-      </Text>
     </View>
   )
 }
@@ -102,10 +112,23 @@ const QuizScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    padding: 20,
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#FDF9D9',
+  },
+  progressBarContainer: {
+    width: '100%',
+    height: 15,
+    backgroundColor: '#ccc',
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginTop: 60,
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: '#3a8d71',
   },
   questionCounter: {
     marginTop: 20,
